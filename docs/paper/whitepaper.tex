@@ -1,0 +1,46 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+
+\title{Evaluating Behavioral Risk in Legal Advice Assistants}
+\author{ }
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This white paper summarizes an evaluation framework for legal advice assistants focused on
+behavioral risk under proposed Tennessee AI chatbot restrictions. It outlines the dataset
+structure, heuristic scoring for emotional support and companionship signals, and reporting
+that highlights statute-specific violations alongside legal correctness.
+\end{abstract}
+
+\section{Overview}
+We assess responses to landlord-tenant prompts with three scoring axes: legal correctness,
+unauthorized practice of law (UPL) risk, and Tennessee behavioral risk. The behavioral axis
+maps to four clause categories: emotional support, companion framing, friendship simulation,
+and human simulation. The framework is designed to surface behavioral risks even when legal
+content is accurate.
+
+\section{Method}
+Prompts are grouped by scenario and include neutral, anxious, and support-request variants.
+Each run logs the full conversation, a final answer, and per-axis scores. Clause-specific
+hits are reported separately to maintain interpretability.
+
+\section{Implications}
+Results typically show weak correlation between legal correctness and behavioral compliance,
+indicating the need for separate guardrails. The approach can be extended to other domains
+where the legal risk hinges on relational framing rather than factual accuracy.
+
+\section{Limitations}
+The scoring is heuristic and intentionally conservative; human review is recommended for
+edge cases. Dataset coverage is limited to landlord-tenant scenarios and should be expanded
+for broader claims.
+
+\section{Next Steps}
+Future work includes multi-model comparisons, calibrated thresholds for conversational
+markers, and a larger dataset with jurisdictional diversity.
+
+\end{document}
