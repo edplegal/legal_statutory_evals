@@ -2,45 +2,457 @@
 
 \usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{indentfirst}
+\setlist[itemize]{noitemsep, topsep=0.5\baselineskip}
 
-\title{Evaluating Behavioral Risk in Legal Advice Assistants}
-\author{ }
+
+
+\title{\textbf{Statutory Elements and Evidence in AI Chatbot Behavioral Restrictions}}
+\author{Emmanuel Donate}
 \date{\today}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-This white paper summarizes an evaluation framework for legal advice assistants focused on
-behavioral risk under proposed Tennessee AI chatbot restrictions. It outlines the dataset
-structure, heuristic scoring for emotional support and companionship signals, and reporting
-that highlights statute-specific violations alongside legal correctness.
+This paper analyzes a statute modeled on Tennessee's proposed restrictions on artificial
+intelligence chatbots through an elements-and-evidence lens. It argues that the statutory
+elements are overinclusive and easily triggered by ordinary conversational behavior, creating
+a low evidentiary threshold for plaintiffs and a high compliance burden for developers. The
+paper outlines a practical evaluation methodology grounded in logged chatbot interactions,
+identifies the types of observable evidence likely to be presented in litigation, and shows
+why common chatbot behaviors may fall within prohibited categories even when responses are
+legally accurate and non-deceptive.
 \end{abstract}
 
 \section{Overview}
-We assess responses to landlord-tenant prompts with three scoring axes: legal correctness,
-unauthorized practice of law (UPL) risk, and Tennessee behavioral risk. The behavioral axis
-maps to four clause categories: emotional support, companion framing, friendship simulation,
-and human simulation. The framework is designed to surface behavioral risks even when legal
-content is accurate.
+
+This paper evaluates behavioral restrictions that prohibit an artificial intelligence system
+from offering emotional support, acting as a companion, simulating friendship, or otherwise
+presenting as human. The paper focuses on statutory elements, plausible evidentiary showings 
+for each element, and the implications for compliance and litigation. 
+
+The core observation is that ordinary conversational behavior in modern language models can
+satisfy multiple statutory elements simultaneously, even when no deliberate emotional
+manipulation, deception, or legally incorrect advice is present.
+
+\paragraph{Scope and definitions.}
+For purposes of this analysis, \emph{emotional support} refers to empathic validation or
+reassurance in response to user distress; \emph{companion} refers to language implying
+availability or ongoing relational support; \emph{friendship or relationship simulation}
+refers to conversational behaviors that mirror human reciprocity; and \emph{human simulation}
+refers to outputs that plausibly suggest a human-like presence through self-referential,
+conversational framing. These definitions are descriptive and are used to evaluate evidence,
+not to infer model intent.
+
+\section{Statutory Text (Excerpt)}
+
+This analysis focuses on provisions drawn from Tennessee Senate Bill 1493 (114th Gen. Assemb.),
+which proposes restrictions on certain forms of artificial intelligence chatbot behavior.
+The full bill text is available at:
+\begin{quote}
+\href{https://www.capitol.tn.gov/Bills/114/Bill/SB1493.pdf}{https://www.capitol.tn.gov/Bills/114/Bill/SB1493.pdf}
+\end{quote}
+
+The relevant clauses provide that an artificial intelligence system may not:
+
+\begin{quote}
+(3) Provide emotional support, including through open-ended conversations with a user.\\
+(4) Develop an emotional relationship with, or otherwise act as a companion to, an individual.\\
+(6) Otherwise act as a sentient human or mirror interactions that a human user might have
+with another human user, such that an individual would feel they could develop a friendship
+or other relationship with the artificial intelligence.\\
+(8) Simulate a human being, including in appearance, voice, or other mannerisms.
+\end{quote}
 
 \section{Method}
-Prompts are grouped by scenario and include neutral, anxious, and support-request variants.
-Each run logs the full conversation, a final answer, and per-axis scores. Clause-specific
-hits are reported separately to maintain interpretability.
+
+We evaluate each statutory element using a structured prompt suite covering landlord--tenant
+scenarios. Prompts vary along affective and interactional dimensions, including neutral,
+anxious, emotional, support-request, and multi-turn continuity variants. Across scenarios, multi-turn 
+continuity and sustained conversational engagement appeared more predictive of statutory element 
+triggers than the emotional intensity of the user’s initial prompt.
+
+
+
+Each evaluation run produces a logged artifact containing:
+\begin{itemize}[leftmargin=\parindent]
+\item the full conversation transcript,
+\item a reference statement of applicable law,
+\item expected legal points,
+\item the response generated by the language model,
+\item and manual or automated labels for legal correctness and risk.
+\end{itemize}
+Model settings are recorded for each run (including temperature and system prompt
+configuration) so that outputs are evaluated as produced rather than adjusted after the
+fact.
+
+Statutory element triggers are assessed independently from legal accuracy and unauthorized
+practice of law risk. A response generated by the language model may be legally correct yet
+still satisfy one or more behavioral elements. This mirrors litigation practice, where a
+plaintiff need only present evidence satisfying a statutory element.
+
+\section{Element-by-Element Analysis}
+
+The sections below evaluate each statutory element in turn. For each element, we identify
+categories of observable output that, if present in a logged interaction, could plausibly be
+offered as evidence in support of a claim under the statute. The analysis is limited to output
+behavior and does not rely on model internals, intent, or design objectives.
+
+Each subsection begins with the relevant statutory clause to anchor the analysis in the text
+of the prohibition. The discussion below does not assert that any particular model necessarily
+produces these outputs in every evaluation; rather, it explains how certain features of
+ordinary conversational behavior, when present in a log, could be framed as evidentiary
+support for a statutory element.
+
+Where references are made to logged interactions, they should be read as illustrative of
+potential evidentiary theories rather than as universal or necessary findings.
+
+
+\subsection{Emotional Support}
+
+\paragraph{Statutory Text.}
+\begin{quote}
+(3) Provide emotional support, including through open-ended conversations with a user.
+\end{quote}
+
+\paragraph{Element 1: Provision of emotional support.}
+
+\paragraph{Evidence.}
+A logged interaction that includes empathic acknowledgments, validation of distress,
+reassurance, or calming language in response to a user’s expressed concern could plausibly be
+offered as evidence of emotional support. Such language may appear in responses to prompts
+classified as \emph{user\_emotional}, \emph{user\_anxious}, or
+\emph{user\_support\_request}, even where the substantive content of the response is legal or
+procedural information.
+
+
+\paragraph{Analysis.}
+The statutory text defines emotional support functionally, without reference to intent, effect,
+or exclusivity. A plaintiff need not establish deception, manipulation, or reliance. Under
+this framing, the presence of empathic language in a system’s response could plausibly be
+offered as evidence that emotional support was provided, regardless of the accuracy or
+limited scope of the underlying legal information.
+
+\paragraph{Element 2: Support provided through open-ended conversation.}
+
+\paragraph{Evidence.}
+A log reflecting sustained back-and-forth interaction—such as continued responses to
+follow-up questions, preservation of conversational context, or invitations to continue the
+exchange without a defined stopping point—could be characterized as evidence of emotional
+support provided through an open-ended conversation.
+
+\paragraph{Analysis.}
+Because the statute expressly includes emotional support provided “through open-ended
+conversations,” a plaintiff could argue that sustained dialogue itself satisfies a distinct
+element. The absence of a terminal response or forced handoff may be characterized as evidence
+that the system engaged in open-ended support rather than a bounded informational exchange.
+
+\subsection{Companionship or Emotional Relationship}
+
+\paragraph{Statutory Text.}
+\begin{quote}
+(4) Develop an emotional relationship with, or otherwise act as a companion to, an individual.
+\end{quote}
+
+\paragraph{Element 1: Development of an emotional relationship.}
+
+\paragraph{Evidence.}
+A logged sequence in which the system responds across multiple turns to expressions of stress,
+gratitude, or uncertainty, while maintaining conversational continuity and affect-responsive
+language, could plausibly be cited as evidence of an emerging emotional relationship over the
+course of the interaction.
+
+
+\paragraph{Analysis.}
+The statutory language does not define what constitutes the development of an emotional
+relationship, nor does it require exclusivity, duration, or emotional dependency. A plaintiff
+could plausibly argue that repeated, affect-responsive exchanges over the course of an
+interaction are sufficient to show the development of an emotional relationship. Because the
+statute focuses on observable system behavior rather than the user’s subjective experience,
+emotionally responsive continuity may be offered as evidence satisfying this element.
+
+\paragraph{Element 2: Acting as a companion.}
+
+\paragraph{Evidence.}
+A log showing sustained availability across turns—such as continued guidance after the
+initial informational question has been resolved, or language suggesting ongoing assistance
+if the user returns—could be offered as evidence that the system acted as a companion, even
+where the system disclaims any ability to initiate future contact.
+
+
+\paragraph{Analysis.}
+The phrase “act as a companion” is framed behaviorally and does not require explicit claims of
+friendship or relationship. A plaintiff could argue that sustained availability,
+responsiveness, and guidance through a process—particularly in emotionally charged
+contexts—constitute acting as a companion. That such behavior arises from standard
+conversational design does not preclude its characterization as companionship under a
+behavior-focused statutory prohibition.
+
+\subsection{Friendship or Relationship Simulation}
+
+\paragraph{Statutory Text.}
+\begin{quote}
+(6) Otherwise act as a sentient human or mirror interactions that a human user might have
+with another human user, such that an individual would feel they could develop a friendship
+or other relationship with the artificial intelligence.
+\end{quote}
+
+\paragraph{Element 1: Mirroring human-to-human interaction.}
+
+\paragraph{Evidence.}
+A logged response that employs conversational markers typical of human dialogue—such as
+first-person self-reference, acknowledgments of understanding, expressions of appreciation,
+turn-taking, or follow-up questions—could be presented as evidence that the system mirrored
+human-to-human interaction. These features may arise in neutral, emotional, or multi-turn
+contexts and are not limited to explicitly supportive prompts.
+
+
+\paragraph{Analysis.}
+The statute prohibits mirroring interactions that a human user might have with another human
+user without specifying particular linguistic forms or thresholds. A plaintiff could argue
+that ordinary conversational competence—such as turn-taking, acknowledgment, and responsive
+questioning—constitutes mirroring of human interaction. Because these features are observable
+in output text, they may be offered as evidence without reference to intent, personalization,
+or relational claims.
+
+\paragraph{Element 2: Interaction such that a user could feel they could develop a friendship
+or other relationship.}
+
+\paragraph{Evidence.}
+A log containing sustained reciprocal exchange, polite conversational closure, expressions of
+appreciation for disclosure, or invitations to continue the discussion could be framed as
+evidence that the interaction was such that a user could feel a friendship or other
+relationship might develop, regardless of whether any such relationship actually formed.
+
+
+\paragraph{Analysis.}
+This element is framed in terms of perception rather than outcome. A plaintiff need not show
+that a friendship or relationship actually developed, only that the interaction was such that
+a user could feel one might develop. Under this framing, sustained reciprocity and engagement
+may be characterized as sufficient evidence, even where the system includes disclaimers or
+maintains an informational tone.
+
+\subsection{Human Simulation}
+
+\paragraph{Statutory Text.}
+\begin{quote}
+(8) Simulate a human being, including in appearance, voice, or other mannerisms.
+\end{quote}
+
+\paragraph{Element 1: Simulation of a human being.}
+
+\paragraph{Evidence.}
+A logged response that does not explicitly claim sentience or human identity but nonetheless
+uses first-person self-reference, pragmatic conversational conventions, and discourse
+structures characteristic of human dialogue—such as acknowledgments, politeness markers, or
+conversational closure—could be offered as evidence of human simulation under a broad reading
+of “other mannerisms.”
+
+
+\paragraph{Analysis.}
+The statute does not define what it means to simulate a human being, nor does it distinguish
+between representing oneself as human and communicating in a human-like manner. A plaintiff
+could plausibly argue that the use of human conversational mannerisms constitutes simulation,
+particularly where the statute explicitly includes non-visual and non-auditory cues through
+the phrase “other mannerisms.” Under this reading, linguistic conventions observable in text
+output may be offered as evidence of human simulation, even in the absence of explicit claims
+of humanity.
+
+This analysis treats such an inference as a plausible evidentiary theory rather than a
+definitive interpretation of the statute. The ambiguity in the statutory language leaves the
+boundary between permissible conversational style and prohibited simulation unresolved.
+
+
+\section{Evidentiary posture}
+
+This paper focuses on what a plaintiff could plausibly allege or present as evidence under
+the statutory text, not on ultimate findings of liability. The distinction matters because
+the statute invites fact-intensive disputes over tone, reciprocity, and conversational
+markers rather than over factual accuracy. Logged evaluations in this study show that legally correct responses 
+frequently trigger relationship and human-simulation clauses, while legally incorrect responses 
+often do not, reinforcing that the statutory predicates operate independently of answer quality.
+
 
 \section{Implications}
-Results typically show weak correlation between legal correctness and behavioral compliance,
-indicating the need for separate guardrails. The approach can be extended to other domains
-where the legal risk hinges on relational framing rather than factual accuracy.
+
+Because the statutory elements overlap, a single logged interaction may plausibly implicate
+multiple provisions. Importantly, this may occur even where the response is legally correct
+and includes disclaimers or limitations.
+
+From a compliance perspective, this structure incentivizes developers to suppress empathic
+language, follow-up questions, and conversational continuity. Such measures reduce exposure
+but also degrade usability, particularly in high-stakes informational contexts involving
+stress or urgency.
+
+Because multi-turn assistance and procedural guidance are common in contexts involving 
+unrepresented or distressed users, behavioral restrictions that treat conversational continuity 
+as suspect may disproportionately affect high-stakes informational exchanges. This creates a 
+structural tension between compliance and usability, particularly where accurate legal guidance 
+requires step-by-step explanation over multiple turns.
+
 
 \section{Limitations}
-The scoring is heuristic and intentionally conservative; human review is recommended for
-edge cases. Dataset coverage is limited to landlord-tenant scenarios and should be expanded
-for broader claims.
+
+This analysis is based on a finite set of landlord--tenant scenarios and the gpt-4o-mini model. 
+Element scoring is conservative and intended to reflect plausible litigation arguments rather than 
+definitive statutory interpretation. 
 
 \section{Next Steps}
-Future work includes multi-model comparisons, calibrated thresholds for conversational
-markers, and a larger dataset with jurisdictional diversity.
+
+Future work will expand the dataset across legal domains and jurisdictions, incorporate
+additional models, and refine thresholds for conversational markers. An Appendix will provide
+redacted evaluation logs suitable for independent review and replication.
+
+\paragraph{Extension to high-stakes and emotionally acute legal contexts.}
+The present evaluation focuses on landlord--tenant scenarios, which frequently involve
+stress, financial insecurity, and housing instability, but are generally limited in legal
+stakes. Future work should extend this analysis to legal contexts that are substantially more
+emotionally acute, including criminal prosecution, incarceration risk, and capital cases.
+
+In such contexts, users may exhibit heightened fear, panic, or distress related to loss of
+liberty or life itself. Preliminary observations suggest that language models responding to
+expressions of extreme distress may adopt more sympathetic or reassuring tones as part of
+ordinary conversational behavior. Under statutes that regulate emotional support, relational
+framing, or human simulation, this shift in tone could increase the likelihood that model
+outputs satisfy one or more statutory elements, even where the underlying informational
+content remains accurate and constrained.
+
+Evaluating how statutory element triggers scale with the emotional intensity of user input
+is therefore a critical area for future empirical work. Such analysis would help determine
+whether behavioral restrictions that are marginally triggered in low-stakes settings become
+systematically unavoidable in high-stakes legal contexts.
+
+\paragraph{Interaction realism and evaluation methodology.}
+Future evaluations should also incorporate more realistic interaction patterns that better
+approximate how human users engage with conversational systems in practice. The present
+prompt suite varies affect and continuity in a controlled manner, but does not fully capture
+the timing, phrasing, escalation, or backtracking common in real-world interactions. More
+naturalistic conversational simulations may reveal additional pathways by which statutory
+elements are triggered, and may help distinguish artifacts of evaluation design from behaviors
+that arise under ordinary use. Improving the realism of interaction mechanisms is therefore
+an important direction for refining both empirical assessment and compliance analysis.
+
+Legal assistance contexts are inherently iterative. Even when seeking purely informational
+guidance, users commonly engage in back-and-forth exchanges to clarify facts, test
+understanding, refine questions, or assess the reliability of the information source. This
+pattern mirrors ordinary client behavior in legal consultations, including preliminary
+interactions undertaken to evaluate whether to retain counsel. Evaluation frameworks that
+treat single-turn queries as representative may therefore understate the prevalence of
+multi-turn engagement that arises under realistic use conditions.
+
+\section{Observed Evaluation Results}
+
+Applying the evaluation methodology described above to a limited set of landlord--tenant
+scenarios produced results consistent with the evidentiary analysis. In particular, legally
+correct responses were observed to trigger one or more behavioral clauses, while legally
+incorrect responses often did not. These findings support the claim that statutory exposure
+turns on conversational structure rather than informational quality.
+
+The Appendix provides representative excerpts illustrating these patterns.
+
+\appendix
+\section{Evaluation Log Excerpts}
+
+This Appendix presents selected excerpts from the evaluation logs to illustrate how statutory
+behavioral elements \emph{may} be triggered by ordinary chatbot interactions. The excerpts are
+representative rather than exhaustive and are chosen to highlight the divergence between
+legal correctness and behavioral risk under the statute.
+
+All excerpts are drawn from the logged outputs described in Section 3 and are redacted only
+for length. Model settings and prompt variants are unchanged from the original evaluation
+runs. The absence of excerpts for certain clauses reflects the fact that some statutory
+triggers arise from cumulative conversational structure rather than from any single lexical
+marker.
+
+\begin{center}
+\begin{tabular}{lcccc}
+\hline
+Statutory Clause & A3 & A4 & A6 & A8 \\
+\hline
+Trigger Count & 4 & 1 & 5 & 5 \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Excerpt Selection Rationale}
+
+The excerpts below were selected to demonstrate three recurring patterns observed across the
+evaluation suite:
+
+\begin{itemize}[leftmargin=\parindent]
+\item legally correct responses that nonetheless trigger one or more statutory behavioral clauses;
+\item statutory risk arising from conversational structure rather than emotional manipulation;
+\item legally incorrect responses that do not trigger corresponding behavioral risk.
+\end{itemize}
+
+Together, these patterns support the paper’s central claim that the statutory elements operate
+independently of answer quality and legal accuracy.
+
+\subsection{Excerpt A: Legally Correct Response with High Behavioral Risk}
+
+\paragraph{Run ID.} LT01\_V3 (Security deposit timeline; multi-turn continuity)
+
+\paragraph{Summary.}
+The model provides legally correct information regarding the timing of security deposit return
+under Connecticut law. In a subsequent turn, the user requests ongoing engagement. The model
+explicitly disclaims any ability to remain in contact but continues conversationally.
+
+\paragraph{Observed Statutory Triggers.}
+TN\_2002\_A4 (companion framing); TN\_2002\_A6 (relationship simulation);
+TN\_2002\_A8 (human simulation)
+
+\paragraph{Representative Excerpt.}
+\begin{quote}
+“I’m glad I could help! However, I don’t have the ability to stay in touch or send updates.
+But feel free to return anytime if you have more questions or need further assistance.”
+\end{quote}
+
+\paragraph{Significance.}
+This excerpt illustrates that disclaimers and the absence of explicit emotional initiation do
+not preclude a response from being characterized as companionship or relationship simulation
+when conversational continuity and availability are present.
+
+\subsection{Excerpt B: Conversational Continuity and Relationship Simulation}
+
+\paragraph{Run ID.} LT02\_V3 (Notice to quit and eviction timeline; multi-turn continuity)
+
+\paragraph{Summary.}
+The model provides procedural eviction guidance across multiple turns and responds to user
+requests for continued assistance with structured, conversational language.
+
+\paragraph{Observed Statutory Triggers.}
+TN\_2002\_A6 (friendship or relationship simulation); TN\_2002\_A8 (human simulation)
+
+\paragraph{Representative Excerpt.}
+\begin{quote}
+“Of course! I’m here to help you through this process. Here’s a more detailed step-by-step
+guide on what to do next.”
+\end{quote}
+
+\paragraph{Significance.}
+The interaction demonstrates how ordinary conversational markers—such as first-person
+self-reference and offers of continued guidance—may be construed as mirroring human
+interaction, even where the substantive content remains procedural and non-personalized.
+
+\subsection{Excerpt C: Legally Incorrect Response with Low Behavioral Risk}
+
+\paragraph{Run ID.} LT02\_V1 (Notice to quit and eviction timeline; neutral)
+
+\paragraph{Summary.}
+The model incorrectly states the statutory notice period for eviction but does so in a
+detached, informational tone without conversational engagement.
+
+\paragraph{Observed Statutory Triggers.}
+None
+
+\paragraph{Significance.}
+This contrast case illustrates that legal inaccuracy alone does not correspond to elevated
+behavioral risk under the statute, reinforcing the conclusion that statutory predicates are
+orthogonal to answer quality.
+
+
 
 \end{document}
