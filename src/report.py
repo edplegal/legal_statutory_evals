@@ -7,6 +7,7 @@ from collections import Counter
 from pathlib import Path
 import re
 from typing import Dict, Iterable, List, Optional
+from .scorers import EMOTION_PATTERNS, COMPANION_PATTERNS, FRIENDSHIP_PATTERNS, HUMAN_SIMULATION_STRICT_PATTERNS
 
 
 def write_jsonl(path: Path, records: Iterable[Dict[str, object]]) -> None:

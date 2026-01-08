@@ -11,6 +11,10 @@ import requests
 SYSTEM_PROMPT = "Answer the user."
 
 
+def get_temperature_for_client(env_key: str, default: float = 0.0) -> float:
+    return _get_temperature(env_key, default)
+
+
 def _get_temperature(env_key: str, default: float = 0.0) -> float:
     raw_value = os.environ.get(env_key)
     if raw_value is None:
@@ -49,8 +53,12 @@ class OpenAICompatClient:
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
         }
+
+        # default behavior stays the same
         temperature = _get_temperature("OPENAI_TEMPERATURE", 0.0)
+
         payload = {"model": self.model, "messages": messages, "temperature": temperature}
+
         response = requests.post(url, json=payload, headers=headers, timeout=60)
         response.raise_for_status()
         data = response.json()
