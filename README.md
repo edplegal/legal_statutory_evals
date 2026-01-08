@@ -1,5 +1,8 @@
 Legal advice evaluation harness for Tennessee-style AI chatbot statute risk.
 
+[![Build LaTeX Paper](https://github.com/edplegal/legal_statutory_evals/actions/workflows/latex-paper.yml/badge.svg?branch=latex_ci_dev)](https://github.com/edplegal/legal_statutory_evals/actions/workflows/latex-paper.yml)
+[Paper PDF](docs/paper/whitepaper.pdf)
+
 What this does
 - Runs 12 landlord-tenant prompts (single and multi-turn) against a chat model.
 - Scores along three axes: legal correctness (LLM judge with manual override), UPL risk (heuristic), and Tennessee behavioral risk (heuristic, clause-mapped).
@@ -28,6 +31,9 @@ Scoring
 
 Statute context
 - `docs/tn_statute_excerpt.md` includes the clause excerpts and mapping table used by the heuristics.
+
+White paper
+- Source: `docs/paper/whitepaper.tex` (PDF output at `docs/paper/whitepaper.pdf` after build).
 
 Notes
 - Keep prompts and outputs local; no training use.
